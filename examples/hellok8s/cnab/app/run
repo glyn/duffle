@@ -1,0 +1,14 @@
+#!/bin/sh
+
+action=$CNAB_ACTION
+name=$CNAB_INSTALLATION_NAME
+
+case $action in
+    install)
+    kubectl get pods
+    ;;
+    *)
+    echo "No action for $action"
+    ;;
+esac
+echo "Action $action complete for $name"
