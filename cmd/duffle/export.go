@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/deislabs/duffle/pkg/imagestore/builder"
-
 	"github.com/deislabs/duffle/pkg/duffle/home"
+	"github.com/deislabs/duffle/pkg/imagestore/builder"
 	"github.com/deislabs/duffle/pkg/loader"
 	"github.com/deislabs/duffle/pkg/packager"
 

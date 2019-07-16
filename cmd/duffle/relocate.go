@@ -108,7 +108,7 @@ duffle relocate path/to/bundle.json --relocation-mapping path/to/relmap.json --r
 func (r *relocateCmd) run() error {
 	relMap := make(map[string]string)
 
-	rel, _, cleanup, err := r.setup()
+	rel, cleanup, err := r.setup()
 	if err != nil {
 		return err
 	}
@@ -122,12 +122,12 @@ func (r *relocateCmd) run() error {
 }
 
 // The caller is responsible for running the returned cleanup function, which may delete the returned bundle.
-func (r *relocateCmd) setup() (*relocator.Relocator, *bundle.Bundle, func(), error) {
+func (r *relocateCmd) setup() (*relocator.Relocator, func(), error) {
 	nop := func() {}
 	dest := ""
 	bundleFile, err := resolveBundleFilePath(r.inputBundle, r.home.String(), r.bundleIsFile)
 	if err != nil {
-		return nil, nil, nop, err
+		return nil, nop, err
 	}
 
 	var bun *bundle.Bundle
@@ -135,37 +135,37 @@ func (r *relocateCmd) setup() (*relocator.Relocator, *bundle.Bundle, func(), err
 	if strings.HasSuffix(bundleFile, ".tgz") {
 		source, err := filepath.Abs(bundleFile)
 		if err != nil {
-			return nil, nil, nop, err
+			return nil, nop, err
 		}
 
 		dest, err = ioutil.TempDir("", "duffle-relocate-unzip")
 		if err != nil {
-			return nil, nil, nop, err
+			return nil, nop, err
 		}
 
 		l := loader.NewLoader()
 		imp, err := packager.NewImporter(source, dest, l, false)
 		if err != nil {
-			return nil, nil, nop, err
+			return nil, nop, err
 		}
 		dest, bun, err = imp.Unzip()
 		if err != nil {
-			return nil, nil, nop, err
+			return nil, nop, err
 		}
 	} else {
 		bun, err = loadBundle(bundleFile)
 		if err != nil {
-			return nil, nil, nop, err
+			return nil, nop, err
 		}
 	}
 
 	if err = bun.Validate(); err != nil {
-		return nil, nil, nop, err
+		return nil, nop, err
 	}
 
 	r.imageStore, err = r.imageStoreBuilder.ArchiveDir(dest).Build()
 	if err != nil {
-		return nil, nil, nop, err
+		return nil, nop, err
 	}
 
 	mapping := func(i image.Name) image.Name {
@@ -174,10 +174,10 @@ func (r *relocateCmd) setup() (*relocator.Relocator, *bundle.Bundle, func(), err
 
 	reloc, err := relocator.NewRelocator(bun, mapping, r.imageStore, r.out)
 	if err != nil {
-		return nil, nil, nop, err
+		return nil, nop, err
 	}
 
-	return reloc, bun, func() { os.RemoveAll(dest) }, nil
+	return reloc, func() { os.RemoveAll(dest) }, nil
 }
 
 func (r *relocateCmd) writeRelocationMapping(relMap map[string]string) error {
