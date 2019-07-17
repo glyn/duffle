@@ -40,18 +40,6 @@ func NewExporter(source, dest, logsDir string, l loader.BundleLoader, b imagesto
 	}, nil
 }
 
-type ImageStore interface {
-	configure(archiveDir string, logs io.Writer) error
-	add(img string) (contentDigest string, err error)
-}
-
-func NewImageStore(thin bool) (ImageStore, error) {
-	if thin {
-		return newNop(), nil
-	}
-	return newOciLayout(), nil
-}
-
 // Export prepares an artifacts directory containing all of the necessary
 //  images, packages the bundle along with the artifacts in a gzipped tar
 //  file, and saves that file to the file path specified as destination.
