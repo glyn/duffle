@@ -12,6 +12,10 @@ type MockBuilder struct {
 	BuildStub      func() (imagestore.Store, error)
 }
 
+func (b *MockBuilder) Create(options ...imagestore.Option) (imagestore.Store, error) {
+	return imagestore.Create(b, options...)
+}
+
 func (b *MockBuilder) ArchiveDir(archiveDir string) imagestore.Builder {
 	b.ArchiveDirStub(archiveDir)
 	return b

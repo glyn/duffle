@@ -14,6 +14,10 @@ type Builder struct {
 	registryClient registry.Client
 }
 
+func (b *Builder) Create(options ...imagestore.Option) (imagestore.Store, error) {
+	return imagestore.Create(b, options...)
+}
+
 // remote is an image store which does not actually store images. It is used to represent thin bundles.
 type remote struct {
 	registryClient registry.Client

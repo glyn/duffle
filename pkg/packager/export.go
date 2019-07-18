@@ -93,7 +93,7 @@ func (ex *Exporter) Export() error {
 		return err
 	}
 
-	ex.imageStore, err = ex.imageStoreBuilder.ArchiveDir(archiveDir).Logs(logsf).Build()
+	ex.imageStore, err = ex.imageStoreBuilder.Create(imagestore.WithArchiveDir(archiveDir), imagestore.WithLogs(logsf))
 	if err != nil {
 		return fmt.Errorf("Error creating artifacts: %s", err)
 	}

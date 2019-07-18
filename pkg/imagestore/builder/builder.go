@@ -33,6 +33,10 @@ type locatingBuilder struct {
 	logs       io.Writer
 }
 
+func (b *locatingBuilder) Create(options ...imagestore.Option) (imagestore.Store, error) {
+	return imagestore.Create(b, options...)
+}
+
 func (b *locatingBuilder) ArchiveDir(archiveDir string) imagestore.Builder {
 	return &locatingBuilder{
 		archiveDir: archiveDir,

@@ -163,7 +163,7 @@ func (r *relocateCmd) setup() (*relocator.Relocator, func(), error) {
 		return nil, nop, err
 	}
 
-	r.imageStore, err = r.imageStoreBuilder.ArchiveDir(dest).Build()
+	r.imageStore, err = r.imageStoreBuilder.Create(imagestore.WithArchiveDir(dest))
 	if err != nil {
 		return nil, nop, err
 	}

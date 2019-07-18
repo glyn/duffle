@@ -18,6 +18,10 @@ type Builder struct {
 	logs           io.Writer
 }
 
+func (b *Builder) Create(options ...imagestore.Option) (imagestore.Store, error) {
+	return imagestore.Create(b, options...)
+}
+
 // ociLayout is an image store which stores images as an OCI image layout.
 type ociLayout struct {
 	layout registry.Layout
