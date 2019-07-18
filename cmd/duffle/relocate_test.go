@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"io"
 	"io/ioutil"
 	"os"
 	"path"
@@ -102,15 +101,6 @@ func relocateFileToFile(t *testing.T, bundle string, expectedErr error, archiveD
 		},
 	}
 
-	isb := &imagestoremocks.MockBuilder{
-		ArchiveDirStub: archiveDirStub,
-		LogsStub: func(io.Writer) {
-		},
-		BuildStub: func() (imagestore.Store, error) {
-			return is, nil
-		},
-	}
-
 	cmd := &relocateCmd{
 		inputBundle: bundle,
 
@@ -127,7 +117,10 @@ func relocateFileToFile(t *testing.T, bundle string, expectedErr error, archiveD
 			}
 			return testMapping(originalImage, t)
 		},
-		imageStoreBuilder: isb,
+		imageStoreConstructor: func(option ...imagestore.Option) (store imagestore.Store, e error) {
+			archiveDirStub(imagestore.Create(option...).ArchiveDir)
+			return is, nil
+		},
 	}
 
 	if err := cmd.run(); (err != nil && expectedErr != nil && err.Error() != expectedErr.Error()) ||

@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/deislabs/duffle/pkg/imagestore"
-	"github.com/deislabs/duffle/pkg/imagestore/builder"
+	"github.com/deislabs/duffle/pkg/imagestore/construction"
 	"github.com/deislabs/duffle/pkg/loader"
 	"github.com/deislabs/duffle/pkg/packager"
 	"github.com/deislabs/duffle/pkg/relocator"
@@ -58,9 +58,9 @@ type relocateCmd struct {
 	out  io.Writer
 
 	// dependencies
-	mapping           pathmapping.PathMapping
-	imageStoreBuilder imagestore.Builder
-	imageStore        imagestore.Store
+	mapping               pathmapping.PathMapping
+	imageStoreConstructor imagestore.Constructor
+	imageStore            imagestore.Store
 }
 
 func newRelocateCmd(w io.Writer) *cobra.Command {
@@ -89,7 +89,7 @@ duffle relocate path/to/bundle.json --relocation-mapping path/to/relmap.json --r
 			relocate.home = home.Home(homePath())
 
 			relocate.mapping = pathmapping.FlattenRepoPathPreserveTagDigest
-			relocate.imageStoreBuilder = builder.NewLocatingBuilder()
+			relocate.imageStoreConstructor = construction.NewLocatingConstructor()
 
 			return relocate.run()
 		},
@@ -163,7 +163,7 @@ func (r *relocateCmd) setup() (*relocator.Relocator, func(), error) {
 		return nil, nop, err
 	}
 
-	r.imageStore, err = r.imageStoreBuilder.ArchiveDir(dest).Build()
+	r.imageStore, err = r.imageStoreConstructor(imagestore.WithArchiveDir(dest))
 	if err != nil {
 		return nil, nop, err
 	}

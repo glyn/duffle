@@ -2,7 +2,6 @@ package remote
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/pivotal/image-relocation/pkg/image"
 	"github.com/pivotal/image-relocation/pkg/registry"
@@ -10,32 +9,14 @@ import (
 	"github.com/deislabs/duffle/pkg/imagestore"
 )
 
-type Builder struct {
-	registryClient registry.Client
-}
-
 // remote is an image store which does not actually store images. It is used to represent thin bundles.
 type remote struct {
 	registryClient registry.Client
 }
 
-func NewRemoteBuilder() *Builder {
-	return &Builder{
-		registryClient: registry.NewRegistryClient(),
-	}
-}
-
-func (b *Builder) ArchiveDir(archiveDir string) imagestore.Builder {
-	return b
-}
-
-func (b *Builder) Logs(logs io.Writer) imagestore.Builder {
-	return b
-}
-
-func (b *Builder) Build() (imagestore.Store, error) {
+func Create(...imagestore.Option) (imagestore.Store, error) {
 	return &remote{
-		registryClient: b.registryClient,
+		registryClient: registry.NewRegistryClient(),
 	}, nil
 }
 

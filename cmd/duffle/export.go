@@ -5,7 +5,7 @@ import (
 	"io"
 
 	"github.com/deislabs/duffle/pkg/duffle/home"
-	"github.com/deislabs/duffle/pkg/imagestore/builder"
+	"github.com/deislabs/duffle/pkg/imagestore/construction"
 	"github.com/deislabs/duffle/pkg/loader"
 	"github.com/deislabs/duffle/pkg/packager"
 
@@ -77,12 +77,12 @@ func (ex *exportCmd) run() error {
 }
 
 func (ex *exportCmd) Export(bundlefile string, l loader.BundleLoader) error {
-	bldr, err := builder.NewBuilder(ex.thin)
+	ctor, err := construction.NewConstructor(ex.thin)
 	if err != nil {
 		return err
 	}
 
-	exp, err := packager.NewExporter(bundlefile, ex.dest, ex.home.Logs(), l, bldr)
+	exp, err := packager.NewExporter(bundlefile, ex.dest, ex.home.Logs(), l, ctor)
 	if err != nil {
 		return fmt.Errorf("Unable to set up exporter: %s", err)
 	}

@@ -1,7 +1,6 @@
 package packager
 
 import (
-	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -42,18 +41,13 @@ func TestExport(t *testing.T) {
 
 	ex := Exporter{
 		source: source,
-		imageStoreBuilder: &imagestoremocks.MockBuilder{
-			ArchiveDirStub: func(archiveDir string) {
-				const expectedArchiveDirSuffix = "examplebun-0.1.0-export"
-				if !strings.HasSuffix(archiveDir, expectedArchiveDirSuffix) {
-					t.Fatalf("expected archive ending in %s, got %s", expectedArchiveDirSuffix, archiveDir)
-				}
-			},
-			LogsStub: func(io.Writer) {
-			},
-			BuildStub: func() (imagestore.Store, error) {
-				return is, nil
-			},
+		imageStoreConstructor: func(option ...imagestore.Option) (store imagestore.Store, e error) {
+			parms := imagestore.Create(option...)
+			const expectedArchiveDirSuffix = "examplebun-0.1.0-export"
+			if !strings.HasSuffix(parms.ArchiveDir, expectedArchiveDirSuffix) {
+				t.Fatalf("expected archive ending in %s, got %s", expectedArchiveDirSuffix, parms.ArchiveDir)
+			}
+			return is, nil
 		},
 		logs:   filepath.Join(tempDir, "export-logs"),
 		loader: loader.NewLoader(),
@@ -98,18 +92,13 @@ func TestExportCreatesFileProperly(t *testing.T) {
 	ex := Exporter{
 		source:      "testdata/examplebun/bundle.json",
 		destination: filepath.Join(tempDir, "random-directory", "examplebun-whatev.tgz"),
-		imageStoreBuilder: &imagestoremocks.MockBuilder{
-			ArchiveDirStub: func(archiveDir string) {
-				const expectedArchiveDirSuffix = "examplebun-0.1.0-export"
-				if !strings.HasSuffix(archiveDir, expectedArchiveDirSuffix) {
-					t.Fatalf("expected archive ending in %s, got %s", expectedArchiveDirSuffix, archiveDir)
-				}
-			},
-			LogsStub: func(io.Writer) {
-			},
-			BuildStub: func() (imagestore.Store, error) {
-				return is, nil
-			},
+		imageStoreConstructor: func(option ...imagestore.Option) (store imagestore.Store, e error) {
+			parms := imagestore.Create(option...)
+			const expectedArchiveDirSuffix = "examplebun-0.1.0-export"
+			if !strings.HasSuffix(parms.ArchiveDir, expectedArchiveDirSuffix) {
+				t.Fatalf("expected archive ending in %s, got %s", expectedArchiveDirSuffix, parms.ArchiveDir)
+			}
+			return is, nil
 		},
 		logs:   filepath.Join(tempDir, "export-logs"),
 		loader: loader.NewLoader(),
@@ -168,14 +157,8 @@ func TestExportDigestMismatch(t *testing.T) {
 
 	ex := Exporter{
 		source: source,
-		imageStoreBuilder: &imagestoremocks.MockBuilder{
-			ArchiveDirStub: func(archiveDir string) {
-			},
-			LogsStub: func(io.Writer) {
-			},
-			BuildStub: func() (imagestore.Store, error) {
-				return is, nil
-			},
+		imageStoreConstructor: func(...imagestore.Option) (store imagestore.Store, e error) {
+			return is, nil
 		},
 		logs:   filepath.Join(tempDir, "export-logs"),
 		loader: loader.NewLoader(),

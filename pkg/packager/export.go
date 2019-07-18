@@ -16,27 +16,27 @@ import (
 )
 
 type Exporter struct {
-	source            string
-	destination       string
-	imageStoreBuilder imagestore.Builder
-	imageStore        imagestore.Store
-	logs              string
-	loader            loader.BundleLoader
+	source                string
+	destination           string
+	imageStoreConstructor imagestore.Constructor
+	imageStore            imagestore.Store
+	logs                  string
+	loader                loader.BundleLoader
 }
 
 // NewExporter returns an *Exporter given information about where a bundle
 //  lives, where the compressed bundle should be exported to,
 //  and what form a bundle should be exported in (thin or thick/full). It also
 //  sets up a docker client to work with images.
-func NewExporter(source, dest, logsDir string, l loader.BundleLoader, b imagestore.Builder) (*Exporter, error) {
+func NewExporter(source, dest, logsDir string, l loader.BundleLoader, c imagestore.Constructor) (*Exporter, error) {
 	logs := filepath.Join(logsDir, "export-"+time.Now().Format("20060102150405"))
 
 	return &Exporter{
-		source:            source,
-		destination:       dest,
-		imageStoreBuilder: b,
-		logs:              logs,
-		loader:            l,
+		source:                source,
+		destination:           dest,
+		imageStoreConstructor: c,
+		logs:                  logs,
+		loader:                l,
 	}, nil
 }
 
@@ -93,7 +93,7 @@ func (ex *Exporter) Export() error {
 		return err
 	}
 
-	ex.imageStore, err = ex.imageStoreBuilder.ArchiveDir(archiveDir).Logs(logsf).Build()
+	ex.imageStore, err = ex.imageStoreConstructor(imagestore.WithArchiveDir(archiveDir), imagestore.WithLogs(logsf))
 	if err != nil {
 		return fmt.Errorf("Error creating artifacts: %s", err)
 	}
