@@ -2,7 +2,10 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"io"
+	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"github.com/spf13/cobra"
@@ -13,7 +16,14 @@ import (
 )
 
 const importDesc = `
-Unpacks a bundle from a gzipped tar file on local file system
+Imports a Cloud Native Application Bundle (CNAB) from a gzipped tar file on the local file system.
+
+The bundle is stored in local storage unless --destination is specified, in which case the file will be unzipped to the
+specified path. Note: if --destination is specified as the empty string, the file will be unzipped to local storage.
+
+Example:
+	$ duffle import mybundle.tgz
+	$ duffle import mybundle.tgz -d bundles/unzipped
 `
 
 type importCmd struct {
@@ -32,7 +42,7 @@ func newImportCmd(w io.Writer) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "import [PATH]",
-		Short: "unpack CNAB bundle from gzipped tar file",
+		Short: "extract CNAB bundle from gzipped tar file",
 		Long:  importDesc,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
@@ -54,12 +64,21 @@ func newImportCmd(w io.Writer) *cobra.Command {
 func (im *importCmd) run() error {
 	source, err := filepath.Abs(im.source)
 	if err != nil {
-		return err
+		return fmt.Errorf("Error in source: %s", err)
 	}
 
-	dest, err := filepath.Abs(im.dest)
-	if err != nil {
-		return err
+	var dest string
+	if im.dest == "" {
+		dest, err = ioutil.TempDir("", "")
+		if err != nil {
+			return err
+		}
+		defer os.RemoveAll(dest)
+	} else {
+		dest, err = filepath.Abs(im.dest)
+		if err != nil {
+			return fmt.Errorf("Error in destination: %s", err)
+		}
 	}
 
 	l := loader.NewLoader()
@@ -67,5 +86,5 @@ func (im *importCmd) run() error {
 	if err != nil {
 		return err
 	}
-	return imp.Import()
+	return imp.Import(im.home)
 }
