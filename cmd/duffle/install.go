@@ -54,6 +54,10 @@ Windows Example:
 You can also load the bundle.json file directly:
 
 	$ duffle install dev_bundle path/to/bundle.json --bundle-is-file
+
+Experimental: it is possible to install a bundle which does not have an invocation image using the -x flag:
+
+    $ duffle install my_release example:0.1.0 -x my-image
 `
 
 type installCmd struct {
@@ -61,14 +65,15 @@ type installCmd struct {
 	home   home.Home
 	out    io.Writer
 
-	driver            string
-	credentialsFiles  []string
-	valuesFile        string
-	setParams         []string
-	setFiles          []string
-	bundleIsFile      bool
-	name              string
-	relocationMapping string
+	driver                  string
+	credentialsFiles        []string
+	valuesFile              string
+	setParams               []string
+	setFiles                []string
+	bundleIsFile            bool
+	name                    string
+	relocationMapping       string
+	externalInvocationImage string
 }
 
 func newInstallCmd(w io.Writer) *cobra.Command {
@@ -95,6 +100,7 @@ func newInstallCmd(w io.Writer) *cobra.Command {
 	f.StringArrayVarP(&install.credentialsFiles, "credentials", "c", []string{}, "Specify credentials to use inside the bundle. This can be a credentialset name or a path to a file.")
 	f.StringArrayVarP(&install.setParams, "set", "s", []string{}, "Set individual parameters as NAME=VALUE pairs")
 	f.StringArrayVarP(&install.setFiles, "set-file", "i", []string{}, "Set individual parameters from file content as NAME=SOURCE-PATH pairs")
+	f.StringVarP(&install.externalInvocationImage, "external-invocation-image", "x", "", "invocation image external to bundle")
 
 	return cmd
 }

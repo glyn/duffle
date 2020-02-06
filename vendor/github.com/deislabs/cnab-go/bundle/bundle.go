@@ -161,6 +161,8 @@ func ValuesOrDefaults(vals map[string]interface{}, b *Bundle) (map[string]interf
 	return res, nil
 }
 
+const optionalInvocationImages = true
+
 // Validate the bundle contents.
 func (b Bundle) Validate() error {
 	_, err := semver.NewVersion(b.SchemaVersion)
@@ -168,7 +170,7 @@ func (b Bundle) Validate() error {
 		return fmt.Errorf("invalid bundle schema version %q: %v", b.SchemaVersion, err)
 	}
 
-	if len(b.InvocationImages) == 0 {
+	if !optionalInvocationImages && len(b.InvocationImages) == 0 {
 		return errors.New("at least one invocation image must be defined in the bundle")
 	}
 
