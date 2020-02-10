@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/deislabs/cnab-go/bundle"
+	"github.com/cnabio/cnab-go/bundle"
 
-	"github.com/deislabs/cnab-go/bundle/definition"
+	"github.com/cnabio/cnab-go/bundle/definition"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/deislabs/duffle/pkg/duffle/home"
+	"github.com/cnabio/duffle/pkg/duffle/home"
 )
 
 func TestGetBundle(t *testing.T) {

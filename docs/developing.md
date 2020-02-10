@@ -4,8 +4,8 @@
 
 Cloning this repository and change directory to it:
 ```console
-$ go get -d github.com/deislabs/duffle/...
-$ cd $(go env GOPATH)/src/github.com/deislabs/duffle
+$ go get -d github.com/cnabio/duffle/...
+$ cd $(go env GOPATH)/src/github.com/cnabio/duffle
 ```
 
 ### Prerequisites

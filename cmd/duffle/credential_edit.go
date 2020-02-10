@@ -6,9 +6,9 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
-	"github.com/deislabs/duffle/pkg/duffle/home"
+	"github.com/cnabio/duffle/pkg/duffle/home"
 
-	"github.com/deislabs/cnab-go/credentials"
+	"github.com/cnabio/cnab-go/credentials"
 	"github.com/ghodss/yaml"
 	"github.com/spf13/cobra"
 	survey "gopkg.in/AlecAivazis/survey.v1"

@@ -9,18 +9,18 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/deislabs/cnab-go/action"
-	"github.com/deislabs/cnab-go/bundle"
-	"github.com/deislabs/cnab-go/bundle/loader"
-	"github.com/deislabs/cnab-go/claim"
-	"github.com/deislabs/cnab-go/credentials"
-	"github.com/deislabs/cnab-go/driver"
-	"github.com/deislabs/cnab-go/driver/lookup"
-	"github.com/deislabs/cnab-go/utils/crud"
+	"github.com/cnabio/cnab-go/action"
+	"github.com/cnabio/cnab-go/bundle"
+	"github.com/cnabio/cnab-go/bundle/loader"
+	"github.com/cnabio/cnab-go/claim"
+	"github.com/cnabio/cnab-go/credentials"
+	"github.com/cnabio/cnab-go/driver"
+	"github.com/cnabio/cnab-go/driver/lookup"
+	"github.com/cnabio/cnab-go/utils/crud"
 	"github.com/spf13/cobra"
 
-	"github.com/deislabs/duffle/pkg/duffle/home"
-	"github.com/deislabs/duffle/pkg/reference"
+	"github.com/cnabio/duffle/pkg/duffle/home"
+	"github.com/cnabio/duffle/pkg/reference"
 )
 
 var (

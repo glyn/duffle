@@ -11,19 +11,19 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/deislabs/cnab-go/bundle"
-	"github.com/deislabs/cnab-go/bundle/loader"
+	"github.com/cnabio/cnab-go/bundle"
+	"github.com/cnabio/cnab-go/bundle/loader"
 	"github.com/pivotal/image-relocation/pkg/image"
 	"github.com/pivotal/image-relocation/pkg/pathmapping"
 	"github.com/pivotal/image-relocation/pkg/transport"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/util/validation"
 
-	"github.com/deislabs/duffle/pkg/duffle/home"
-	"github.com/deislabs/duffle/pkg/imagestore"
-	"github.com/deislabs/duffle/pkg/imagestore/construction"
-	"github.com/deislabs/duffle/pkg/packager"
-	"github.com/deislabs/duffle/pkg/relocator"
+	"github.com/cnabio/duffle/pkg/duffle/home"
+	"github.com/cnabio/duffle/pkg/imagestore"
+	"github.com/cnabio/duffle/pkg/imagestore/construction"
+	"github.com/cnabio/duffle/pkg/packager"
+	"github.com/cnabio/duffle/pkg/relocator"
 )
 
 const (

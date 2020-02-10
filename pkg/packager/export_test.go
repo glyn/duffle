@@ -9,10 +9,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/deislabs/cnab-go/bundle/loader"
+	"github.com/cnabio/cnab-go/bundle/loader"
 
-	"github.com/deislabs/duffle/pkg/imagestore"
-	"github.com/deislabs/duffle/pkg/imagestore/imagestoremocks"
+	"github.com/cnabio/duffle/pkg/imagestore"
+	"github.com/cnabio/duffle/pkg/imagestore/imagestoremocks"
 )
 
 func TestExport(t *testing.T) {

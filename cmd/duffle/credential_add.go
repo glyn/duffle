@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/deislabs/duffle/pkg/duffle/home"
+	"github.com/cnabio/duffle/pkg/duffle/home"
 
-	"github.com/deislabs/cnab-go/credentials"
+	"github.com/cnabio/cnab-go/credentials"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
