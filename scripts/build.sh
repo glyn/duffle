@@ -8,7 +8,7 @@ archs=${GOARCH:-amd64}
 for os in $oses; do
   for arch in $archs; do 
     echo "building $os-$arch";
-    GOOS=$os GOARCH=$arch CGO_ENABLED=0 go build -mod=vendor -ldflags "$LDFLAGS" -o ./bin/duffle-$os-$arch ./cmd/duffle; \
+    GOOS=$os GOARCH=$arch CGO_ENABLED=0 GO111MODULE=on go build -mod=vendor -ldflags "$LDFLAGS" -o ./bin/duffle-$os-$arch ./cmd/duffle; \
   done; \
   if [ $os = 'windows' ]; then
     mv ./bin/duffle-$os-$arch ./bin/duffle-$os-$arch.exe; \

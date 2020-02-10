@@ -95,15 +95,6 @@ If this detects that some imports need re-organising (errors like "File is not `
 $ make goimports
 ```
 
-## Dependency Resolution
-
-If, at any time, you need to (re-)resolve the project's dependencies, perhaps
-because a new one is needed or an existing one is no longer needed, issue:
-
-```console
-$ make dep
-```
-
 ## Debugging
 
 For instructions on using VS Code to debug the Duffle binary, see [the debugging document](debugging.md).

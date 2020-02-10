@@ -22,7 +22,7 @@ BASE_PACKAGE_NAME := github.com/cnabio/duffle
 
 ifneq ($(SKIP_DOCKER),true)
 	PROJECT_ROOT := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
-	DEV_IMAGE := quay.io/deis/lightweight-docker-go:v0.7.0
+	DEV_IMAGE := golang:1.13
 	DOCKER_CMD := docker run \
 		-it \
 		--rm \
@@ -61,10 +61,6 @@ MUTABLE_IMAGE_NAME := $(DOCKER_REGISTRY)$(DOCKER_ORG)$(BASE_IMAGE_NAME):$(MUTABL
 # Utility targets                                                              #
 ################################################################################
 
-.PHONY: dep
-dep:
-	$(DOCKER_CMD) dep ensure -v
-
 .PHONY: goimports
 goimports:
 	$(DOCKER_CMD) sh -c "find . -name \"*.go\" | fgrep -v vendor/ | xargs goimports -w -local github.com/cnabio/duffle"
@@ -79,19 +75,13 @@ build-drivers:
 # Tests                                                                        #
 ################################################################################
 
-# Verifies there are no discrepancies between desired dependencies and the
-# tracked, vendored dependencies
-.PHONY: verify-vendored-code
-verify-vendored-code:
-	$(DOCKER_CMD) dep check
-
 .PHONY: lint
 lint:
 	$(DOCKER_CMD) golangci-lint run --config ./golangci.yml
 
 .PHONY: test
 test:
-	$(DOCKER_CMD) go test ./...
+	$(DOCKER_CMD) GO111MODULE=on go test ./...
 
 ################################################################################
 # Build / Publish                                                              #
